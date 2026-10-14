@@ -17,6 +17,6 @@ jobs:
         run: python3 --version
 
       - name: run application
-        run: python3 wrong-appy
+        run: python3 app.py
 
   
