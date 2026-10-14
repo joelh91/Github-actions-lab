@@ -1,0 +1,22 @@
+name: CI pipeline
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: checkout
+        uses: actions/checkout@v4
+
+      - name: python versiom
+        run: python3 --version
+
+      - name: run application
+        run: python3 app.py
+
+  
