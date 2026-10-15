@@ -16,13 +16,22 @@ jobs:
       - name: python version
         run: python3 --version
 
-      - name: install dependencies
-        run: python3 -m pip install -r requirements.txt
-
-      - name: run tests
-        run: python3 -m pytest
-
       - name: run application
         run: python3 app.py
 
+   
+  test:
+    needs: build
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: checkout
+        uses: actions/checkout@v4
+
+      - name: installing dependencies
+        run: python3 -m pip install -r requirements.txt
+
+      - name: testing application
+        run: python3 -m pytest
+     
   
