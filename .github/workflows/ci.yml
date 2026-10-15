@@ -10,8 +10,9 @@ on:
       - main
 
   workflow_dispatch:
- 
 
+env:
+  APP_NAME: app.py
 
 jobs:
   build:
@@ -25,7 +26,7 @@ jobs:
         run: python3 --version
 
       - name: run application
-        run: python3 app.py
+        run: python3 $APP_NAME
 
   test:
     runs-on: ubuntu-latest
