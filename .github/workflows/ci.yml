@@ -17,13 +17,12 @@ jobs:
         run: python3 --version
 
       - name: run application
-        run: python3 app.py
+        run: python3 wrong-pp.pyy
 
-   
   test:
     needs: build
     runs-on: ubuntu-latest
-    
+
     steps:
       - name: checkout
         uses: actions/checkout@v4
@@ -33,5 +32,3 @@ jobs:
 
       - name: testing application
         run: python3 -m pytest
-     
-  
