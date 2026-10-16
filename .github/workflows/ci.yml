@@ -19,6 +19,10 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - name: use pratice secret
+        env:
+          APP_PASSWORD: ${{ secrets.APP_PASSWORD }}
+        run: echo "Secret is configure"
       - name: checkout
         uses: actions/checkout@v4
 
