@@ -12,6 +12,10 @@ on:
 
   workflow_dispatch:
 
+permissions:
+  id-token: write
+  contents: read
+
 env:
   APP_NAME: app.py
 
@@ -20,10 +24,11 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: use pratice secret
+      - name: use practice secret
         env:
           APP_PASSWORD: ${{ secrets.APP_PASSWORD }}
-        run: echo "Secret is configure"
+        run: echo "Secret is configured"
+
       - name: checkout
         uses: actions/checkout@v4
 
@@ -58,14 +63,29 @@ jobs:
         run: python3 -m pytest
 
   docker:
+    if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
-    needs: test
-    
+    needs: [build, test]
+
     steps:
       - name: checkout
         uses: actions/checkout@v4
 
-      - name: build docker image
-        run: docker build -t github-actions:v1 . 
+      - name: configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v5
+        with:
+          role-to-assume: arn:aws:iam::203918843788:role/GitHubActionsECRRole
+          aws-region: us-east-1
 
-    
+      - name: verify AWS identity
+        run: aws sts get-caller-identity
+
+      - name: login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v2
+
+      - name: build docker image
+        run: docker build -t 203918843788.dkr.ecr.us-east-1.amazonaws.com/mini-python-repo:v1 .
+
+      - name: push docker image to ECR
+        run: docker push 203918843788.dkr.ecr.us-east-1.amazonaws.com/mini-python-repo:v1
